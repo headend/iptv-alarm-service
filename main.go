@@ -1,7 +1,7 @@
 package main
 
 import (
-	loggingpb "github.com/headend/iptv-logging-service/alarm_service"
+	"github.com/headend/iptv-logging-service/alarm-service"
 	"log"
 )
 

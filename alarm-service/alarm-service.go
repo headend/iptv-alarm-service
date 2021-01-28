@@ -5,5 +5,5 @@ import (
 )
 
 func StartAlarmService()  {
-	telegram.SendMsgToTelegram("jj")
+	telegram.SendMsgToTelegram("kaka")
 }
