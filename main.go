@@ -1,11 +1,13 @@
 package main
 
 import (
-	"github.com/headend/iptv-alarm-service/telegram"
+	loggingpb "github.com/headend/iptv-logging-service/alarm_service"
+	"log"
 )
 
-const chatid = -585024223
 
 func main()  {
-	telegram.SendTextToTelegram(chatid, "Fom bot 2")
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	alarm_service.StartAlarmService()
 }
+

@@ -1,13 +1,15 @@
 package telegram
 
-
 import (
-"encoding/json"
-"io/ioutil"
-"log"
-"net/http"
-"net/url"
-"strconv"
+	"encoding/json"
+	"fmt"
+	"github.com/golang/protobuf/jsonpb"
+	loggingpb "github.com/headend/iptv-logging-service/proto"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"net/url"
+	"strconv"
 )
 
 // Update is the type of request that telegram sends once u send message to the bot
@@ -44,7 +46,7 @@ type CallbackQuery struct {
 	Data string `json:"data"`
 }
 
-
+const chatid = -585024223
 const telegramAPIBaseURL string = "https://api.telegram.org/bot"
 const telegramAPISendMessage string = "/sendMessage"
 const telegramTokenEnv string = "1531125523:AAFKXNH6yoL7sr54W8FvCEViOkBFPvocqIM"
@@ -94,4 +96,34 @@ func SendTextToTelegram(chatID int, text string) (string, error) {
 	log.Printf("Body of Telegram Response: %s", bodyString)
 
 	return bodyString, nil
+}
+
+func SendMsgToTelegram(msg string) {
+	telegramMsg := ""
+	var logData loggingpb.MonitorLogsRequest
+	if err := jsonpb.UnmarshalString(msg, &logData); err != nil {
+		log.Println(err)
+		return
+	}
+	if logData.Description == "" {
+		log.Printf("Log does not content %#v \n", logData)
+		return
+	}
+	switch logData.AfterStatus {
+	case 0:
+		telegramMsg = fmt.Sprintf("[Critical] %s\n", logData.Description)
+	case 1:
+		telegramMsg = fmt.Sprintf("[Info] %s\n", logData.Description)
+	case 2:
+		telegramMsg = fmt.Sprintf("[Critical] %s\n", logData.Description)
+	case 3:
+		telegramMsg = fmt.Sprintf("[Critical] %s\n", logData.Description)
+	default:
+		telegramMsg = fmt.Sprintf("[Error] %s\n", logData.Description)
+	}
+	_, err2 := SendTextToTelegram(chatid, telegramMsg)
+	if err2 != nil {
+		println(err2)
+		return
+	}
 }
