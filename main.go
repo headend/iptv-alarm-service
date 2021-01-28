@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./telegram"
+	"github.com/headend/iptv-alarm-service/telegram"
 )
 
 const chatid = -585024223
