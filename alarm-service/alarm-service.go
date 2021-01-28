@@ -25,6 +25,6 @@ func StartAlarmService()  {
 			time.Sleep(10*time.Second)
 			continue
 		}
-		go telegram.SendMsgToTelegram(msg.value)
+		go telegram.SendMsgToTelegram(string(msg.Value))
 	}
 }
